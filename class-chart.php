@@ -241,24 +241,33 @@ class AffiliateWP_MLA_Charts extends AffiliateWP_MLA_Common {
 
   // Gets a node's data
   public function get_node_attributes($affiliate_id = '') {
-
     if ( empty($affiliate_id) ) $affiliate_id = $this->affiliate_id;
 
     $affiliate_obj = new AffiliateWP_MLA_Affiliate($affiliate_id);
-    //$parent_id = $affiliate_obj->get_parent_affiliate_id();
-    //$name = affwp_get_affiliate_name( $affiliate->affiliate_id );
-    //$info = $this->get_node_info( $affiliate );
+
+    // Get the user ID based on the affiliate ID
+    $user_id = affwp_get_affiliate_user_id($affiliate_id);
+    $user = get_user_by('ID', $user_id);
+    $user_roles = (!empty($user) && !empty($user->roles)) ? $user->roles : array();
+
+    // Set classname based on user roles
+    $class_name = '';
+    foreach ($user_roles as $user_role) {
+        $class_name .= $user_role . ' ';
+    }
+
     $team_leader_class = (mla_is_affiliate_team_leader($affiliate_id)) ? ' team_leader' : '';
     $super_team_leader_class = (mla_is_affiliate_super_team_leader($affiliate_id)) ? ' super_team_leader' : '';
 
-    $class_name = affwp_get_affiliate_status($affiliate_id) . $team_leader_class . $super_team_leader_class;
+    // Append the user role classname to existing classnames
+    $class_name .= affwp_get_affiliate_status($affiliate_id) . $team_leader_class . $super_team_leader_class;
 
     $node_data = array(
-      'id' => $affiliate_id,
-      'parent_id' => $affiliate_obj->get_parent_affiliate_id(),
-      'name' => $this->get_node_title($affiliate_id),
-      'className' => $class_name,
-      'title' => $this->get_node_content($affiliate_id) // content/earnings
+        'id' => $affiliate_id,
+        'parent_id' => $affiliate_obj->get_parent_affiliate_id(),
+        'name' => $this->get_node_title($affiliate_id),
+        'className' => $class_name,
+        'title' => $this->get_node_content($affiliate_id) // content/earnings
     );
 
     // deprecated
@@ -268,7 +277,6 @@ class AffiliateWP_MLA_Charts extends AffiliateWP_MLA_Common {
     $node_data = apply_filters('mla_chart_node_attributes', $node_data, $affiliate_id, $chart_location);
 
     return $node_data;
-
   }
 
   // Get a sub affiliates expanded view info
