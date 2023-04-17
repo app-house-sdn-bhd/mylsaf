@@ -303,3 +303,17 @@ position: absolute;
 .orgchart .inactive .content, .orgchart .pending .content, .orgchart .inactive .second-menu, .orgchart .pending .second-menu {
   border-color: #B4B4B4;
 }
+
+.orgchart .active.subscriber .title, .orgchart .active.subscriber .second-menu .info-box-title {
+  background-color: #ff8ae6; 
+}
+.orgchart .active.subscriber .content, .orgchart .active.subscriber .second-menu {
+  border-color: #ff8ae6; 
+}
+
+.orgchart .active.bp .title, .orgchart .active.bp .second-menu .info-box-title {
+  background-color: #0E97C4; 
+}
+.orgchart .active.bp .content, .orgchart .active.bp .second-menu {
+  border-color: #0E97C4; 
+}
